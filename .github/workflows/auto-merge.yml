@@ -1,11 +1,9 @@
 on:
   pull_request_review:
-    types:
-      - submitted
-      - edited
+    types: [submitted, edited]
   workflow_run:
-    types:
-      - completed
+    types: [completed]
+    workflows: ["conan"]
 
 
 jobs:
