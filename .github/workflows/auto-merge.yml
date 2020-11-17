@@ -1,5 +1,5 @@
 on:
-  pull_requests_review:
+  pull_request_review:
     types: [submitted, edited]
   workflow_run:
     types: [completed]
