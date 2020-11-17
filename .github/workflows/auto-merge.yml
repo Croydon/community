@@ -4,6 +4,7 @@ on:
   workflow_run:
     types: [completed]
 
+
 jobs:
   automerge:
     name: Auto Merge Pull Requests
