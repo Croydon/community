@@ -5,6 +5,7 @@ on:
     types: [completed]
     workflows: ["conan"]
 
+name: "auto merge"
 
 jobs:
   automerge:
