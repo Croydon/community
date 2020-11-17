@@ -1,6 +1,8 @@
 on:
-  pull_requests:
+  pull_requests_review:
     types: [submitted, edited]
+  workflow_run:
+    types: [completed]
 
 jobs:
   automerge:
