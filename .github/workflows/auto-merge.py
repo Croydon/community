@@ -49,9 +49,19 @@ if pull_request_number == "0":
 # pull_request.state == "approved" ? is dismissed a state we would get here?
 
 pr = repo.get_pull(pull_request_number)
+
+pr_latest_commit = pr.head.sha
+
+print("latest commit in pull request: {}".format(pr_latest_commit))
+
 reviews = pr.get_reviews()
 
-print("reviews:")
+
+print("all reviews:")
+pprint.pprint(reviews)
+
+print("")
+print("")
+
 for review in reviews:
-    pprint.pprint(review)
-    print("{}: {}".format(review.user, review.state))
+    print("{}: {} on commit: {}".format(review.user, review.state, review.commit_id))

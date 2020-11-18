@@ -19,6 +19,6 @@ jobs:
       - name: Install PyGithub
         run: |
           pip install PyGithub
-      - name: debug
+      - name: Auto Merge Pull Request
         run: |
           python .github/workflows/auto-merge.py
