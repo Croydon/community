@@ -19,7 +19,7 @@ def print_error(output_str: str):
     print(output_str)
     exit(1)
 
-if event_name != "workflow_run" or event_name != "pull_request_review":
+if event_name != "workflow_run" and event_name != "pull_request_review":
     print_error("Unexpected event_name which triggered this workflow run: {}".format(event_name))
 
 event_data = {}
