@@ -61,5 +61,6 @@ print("all reviews on latest commit:")
 
 print("")
 
-for review in reviews if review.commit_id == pr_latest_commit:
-    print("{}: {} on commit: {}".format(review.user, review.state, review.commit_id))
+for review in reviews:
+    if review.commit_id == pr_latest_commit:
+        print("{}: {} on commit: {}".format(review.user, review.state, review.commit_id))
