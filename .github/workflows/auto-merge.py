@@ -28,7 +28,7 @@ if event_name != "workflow_run" and event_name != "pull_request_review":
 event_data = {}
 with open(os.getenv("GITHUB_EVENT_PATH"), mode="r") as payload:
     event_data = json.load(payload)
-    # pprint.pprint(event_data)
+    pprint.pprint(event_data)
 
 
 pull_request_number = "0"
@@ -103,6 +103,12 @@ if approvals_on_latest_commit < approvals_required:
 
 print("Required approvals reached and no request for changes. Checking latest commit status...")
 
+
+# There is a difference in commit statuses and checks
+# Our CI runs are all qualifing as checks
+# Since PyGithub is not yet supporting checks, we have to use something else here
+# https://github.com/PyGithub/PyGithub/issues/1621
+# TODO: Use only PyGithub one it supports checks
 statuses = repo.get_commit(pr_latest_commit).get_statuses()
 
 for status in statuses:
