@@ -57,11 +57,9 @@ print("latest commit in pull request: {}".format(pr_latest_commit))
 reviews = pr.get_reviews()
 
 
-print("all reviews:")
-pprint.pprint(reviews)
+print("all reviews on latest commit:")
 
 print("")
-print("")
 
-for review in reviews:
+for review in reviews if review.commit_id == pr_latest_commit:
     print("{}: {} on commit: {}".format(review.user, review.state, review.commit_id))
