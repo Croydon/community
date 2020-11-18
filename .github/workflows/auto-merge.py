@@ -137,7 +137,7 @@ checks_successful_required = checks["total_count"] - 1
 for check in checks["check_runs"]:
     if check["status"] == "completed" and check["conclusion"] == "success":
         checks_successful = checks_successful + 1
-    elif check["status"] == "pending":
+    elif check["status"] == "in_progress":
         if check["name"] != "Auto Merge Pull Requests":
             print("The check {} is still pending. Exiting.".format(check["name"]))
             exit(0)
