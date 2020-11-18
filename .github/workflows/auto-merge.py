@@ -6,7 +6,7 @@ import subprocess
 import pprint
 
 REPOSITORY_SLUG = os.getenv("GITHUB_REPOSITORY")
-g = Github(os.getenv("GITHUB_TOKEN"))
+g = Github(os.getenv("BOT_GITHUB_TOKEN"))
 repo = g.get_repo(REPOSITORY_SLUG)
 
 event_name = os.getenv("GITHUB_EVENT_NAME")

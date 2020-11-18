@@ -23,3 +23,5 @@ jobs:
       - name: Auto Merge Pull Request
         run: |
           python .github/workflows/auto-merge.py
+        env:
+          BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
