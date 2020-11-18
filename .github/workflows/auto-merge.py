@@ -11,10 +11,12 @@ event_name = os.getenv("GITHUB_EVENT_NAME")
 event_path = os.getenv("GITHUB_EVENT_PATH")
 event_ref = os.getenv("GITHUB_REF")
 event_sha = os.getenv("GITHUB_SHA")
-print(event_name)
-print(event_path)
-print(event_ref)
-print(event_sha)
+print("event_name: {}".format(event_name))
+print("event_path: {}".format(event_path))
+print("event_ref: {}".format(event_ref))
+print("event_sha: {}".format(event_sha))
+print("")
+print("")
 
 def print_error(output_str: str):
     print(output_str)
@@ -26,7 +28,7 @@ if event_name != "workflow_run" and event_name != "pull_request_review":
 event_data = {}
 with open(os.getenv("GITHUB_EVENT_PATH"), mode="r") as payload:
     event_data = json.load(payload)
-    pprint.pprint(event_data)
+    # pprint.pprint(event_data)
 
 
 pull_request_number = "0"
@@ -70,8 +72,6 @@ for review in reviews:
     # TODO: Check if review comes from an OWNER or Collaborator
     latest_review_by_user[review.user.login] = review
 
-pprint.pprint(latest_review_by_user)
-
 for _, review in latest_review_by_user.items():
     # CHANGES_REQUESTED should be always dismissed or changed to an APPROVAL
     # Even if the CHANGES_REQUESTED do not happen on the latest commit,
@@ -103,6 +103,7 @@ if approvals_on_latest_commit < approvals_required:
 print("Required approvals reached and no request for changes. Checking latest commit status...")
 
 statuses = repo.get_commit(pr_latest_commit).get_statuses()
+pprint.pprint(statuses)
 
 for status in statuses:
     pprint.pprint(status)
