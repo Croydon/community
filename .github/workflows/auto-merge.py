@@ -104,7 +104,6 @@ if approvals_on_latest_commit < approvals_required:
 print("Required approvals reached and no request for changes. Checking latest commit status...")
 
 statuses = repo.get_commit(pr_latest_commit).get_statuses()
-pprint.pprint(statuses)
 
 for status in statuses:
     pprint.pprint(status)
