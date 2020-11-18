@@ -5,7 +5,7 @@ import json
 import subprocess
 import pprint
 
-REPOSITORY_SLUG = "Croydon/community"  # TODO env var
+REPOSITORY_SLUG = os.getenv("GITHUB_REPOSITORY")
 g = Github(os.getenv("GITHUB_TOKEN"))
 repo = g.get_repo(REPOSITORY_SLUG)
 
@@ -145,6 +145,10 @@ for check in checks["check_runs"]:
             print("Unexpected status {} for check {}. Conclusion {}. Exiting.".format(check["status"], check["name"], check["conclusion"]))
             print(check)
             exit(0)
+
+print("checks_successful: {}".format(checks_successful))
+print("checks_successful_required: {}".format(checks_successful_required))
+print("")
 
 if checks_successful > checks_successful_required:
     print_error("More checks have passed as there should be. Something is wrong in our merge logic. Exiting.")
