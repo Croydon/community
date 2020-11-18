@@ -85,15 +85,20 @@ for _, review in latest_review_by_user.items():
         if review.state == "APPROVAL":
             approvals_on_latest_commit = approvals_on_latest_commit + 1
 
-
-if changes_requested:
-    print("The pull request contains at least one request for changes on the latest commit")
-    exit(0)
-
+print("")
+print("")
 print("approvals_on_latest_commit: {}".format(approvals_on_latest_commit))
 print("approvals_required: {}".format(approvals_required))
 print("")
+print("")
 
-if approvals_on_latest_commit >= approvals_requires:
-    print("Required approvals reached and no request for changes. Merging!")
-    # TODO: merge
+if changes_requested:
+    print("The pull request contains at least one request for changes on the latest commit. This has to be addressed first.")
+    exit(0)
+
+if approvals_on_latest_commit < approvals_required:
+    print("The amount of required approvals are not reached yet.")
+    exit(0)
+
+print("Required approvals reached and no request for changes. Checking latest commit status...")
+# TODO
