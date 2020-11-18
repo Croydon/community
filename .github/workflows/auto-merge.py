@@ -156,4 +156,4 @@ if checks_successful < checks_successful_required:
 print("")
 print("All checks passed. Merging...")
 
-pr.merge(merge_methode="squash")
+pr.merge(merge_method="squash")
