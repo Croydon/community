@@ -126,7 +126,7 @@ checks_api_call = subprocess.run(
 
 checks_string = checks_api_call.stdout.decode("utf-8")
 
-checks = json.load(checks_string)
+checks = json.loads(checks_string)
 
 
 checks_successful = 0
