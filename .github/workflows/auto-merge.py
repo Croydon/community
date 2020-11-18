@@ -2,6 +2,7 @@ from github import Github
 
 import os
 import json
+import pprint
 
 g = Github(os.getenv("GITHUB_TOKEN"))
 repo = g.get_repo("Croydon/community") # TODO env var
@@ -25,14 +26,14 @@ if event_name != "workflow_run" and event_name != "pull_request_review":
 event_data = {}
 with open(os.getenv("GITHUB_EVENT_PATH"), mode="r") as payload:
     event_data = json.load(payload)
-    print(event_data)
+    pprint.pprint(event_data)
 
 
 pull_request_number = "0"
 if event_name == "workflow_run":
-    pull_request_number = event_data["workflow_run"]["pull_requests"]["number"]
+    pull_request_number = event_data["pull_requests"]["number"]
 elif event_name == "pull_request_review":
-    pull_request_number = event_data["pull_request_review"]["pull_request"]["number"]
+    pull_request_number = event_data["pull_request"]["number"]
 
 print("pull_request_number: {}".format(pull_request_number))
 
