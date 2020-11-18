@@ -66,7 +66,7 @@ pr_latest_commit = pr.head.sha
 print("latest commit in pull request: {}".format(pr_latest_commit))
 
 reviews = pr.get_reviews()
-collaborators = pr.get_collaborators()
+collaborators = repo.get_collaborators()
 
 print("all reviews on latest commit from collaborators:")
 
