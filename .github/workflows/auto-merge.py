@@ -66,9 +66,9 @@ pr_latest_commit = pr.head.sha
 print("latest commit in pull request: {}".format(pr_latest_commit))
 
 reviews = pr.get_reviews()
+collaborators = pr.get_collaborators()
 
-
-print("all reviews on latest commit:")
+print("all reviews on latest commit from collaborators:")
 
 print("")
 
@@ -76,12 +76,12 @@ changes_requested = False
 approvals_on_latest_commit = 0
 approvals_required = 1
 
-latest_review_by_user = {}
+latest_review_by_collaborators = {}
 for review in reviews:
-    # TODO: Check if review comes from an OWNER or Collaborator
-    latest_review_by_user[review.user.login] = review
+    if review.user in collaborators:
+        latest_review_by_collaborators[review.user.login] = review
 
-for _, review in latest_review_by_user.items():
+for _, review in latest_review_by_collaborators.items():
     # CHANGES_REQUESTED should be always dismissed or changed to an APPROVAL
     # Even if the CHANGES_REQUESTED do not happen on the latest commit,
     # they should be respected
@@ -146,12 +146,13 @@ for check in checks["check_runs"]:
             print(check)
             exit(0)
 
+
+# checks_successful might be one higher than checks_successful_required
+# there seems to be a dely in the API reponse,
+# so the response might not yet have THIS workflow run in it
 print("checks_successful: {}".format(checks_successful))
 print("checks_successful_required: {}".format(checks_successful_required))
 print("")
-
-if checks_successful > checks_successful_required:
-    print_error("More checks have passed as there should be. Something is wrong in our merge logic. Exiting.")
 
 if checks_successful < checks_successful_required:
     print("Not all checks have passed. More work required 🙂")
