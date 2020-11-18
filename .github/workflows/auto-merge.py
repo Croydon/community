@@ -82,7 +82,7 @@ for _, review in latest_review_by_user.items():
     if review.commit_id == pr_latest_commit:
         print("{}: {} on commit: {}".format(review.user, review.state, review.commit_id))
 
-        if review.state == "APPROVAL":
+        if review.state == "APPROVED":
             approvals_on_latest_commit = approvals_on_latest_commit + 1
 
 print("")
