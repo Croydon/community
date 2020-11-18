@@ -147,8 +147,7 @@ for check in checks["check_runs"]:
             exit(0)
 
 if checks_successful > checks_successful_required:
-    print("More checks have passed as there should be. Something is wrong in our merge logic. Exiting.")
-    exit(0)
+    print_error("More checks have passed as there should be. Something is wrong in our merge logic. Exiting.")
 
 if checks_successful < checks_successful_required:
     print("Not all checks have passed. More work required 🙂")
