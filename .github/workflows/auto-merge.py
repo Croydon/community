@@ -62,6 +62,9 @@ print("all reviews on latest commit:")
 print("")
 
 changes_requested = False
+approvals_on_latest_commit = 0
+approvals_required = 1
+
 latest_review_by_user = {}
 for review in reviews:
     # TODO: Check if review comes from an OWNER or Collaborator
@@ -79,6 +82,18 @@ for _, review in latest_review_by_user.items():
     if review.commit_id == pr_latest_commit:
         print("{}: {} on commit: {}".format(review.user, review.state, review.commit_id))
 
+        if review.state == "APPROVAL":
+            approvals_on_latest_commit = approvals_on_latest_commit + 1
+
 
 if changes_requested:
     print("The pull request contains at least one request for changes on the latest commit")
+    exit(0)
+
+print("approvals_on_latest_commit: {}".format(approvals_on_latest_commit))
+print("approvals_required: {}".format(approvals_required))
+print("")
+
+if approvals_on_latest_commit >= approvals_requires:
+    print("Required approvals reached and no request for changes. Merging!")
+    # TODO: merge
