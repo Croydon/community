@@ -33,6 +33,7 @@ with open(os.getenv("GITHUB_EVENT_PATH"), mode="r") as payload:
 
 pull_request_number = "0"
 if event_name == "workflow_run":
+    # TODO: cover no existing pull_requests (i.e. main branch pushes) or several pull_requests
     pull_request_number = event_data["pull_requests"]["number"]
 elif event_name == "pull_request_review":
     pull_request_number = event_data["pull_request"]["number"]
@@ -107,5 +108,8 @@ pprint.pprint(statuses)
 
 for status in statuses:
     pprint.pprint(status)
+    print("test")
+
+
 
 # TODO
