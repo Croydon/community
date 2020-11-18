@@ -1,10 +1,12 @@
 on:
   pull_request_review:
-    types: [submitted, edited]
+    types: [submitted, edited, dismissed]
   workflow_run:
     types: [completed]
     workflows: ["conan"]
     branches-ignore: ["main"]
+  check_suite:
+    types: [completed]
 
 name: "auto merge"
 

@@ -20,11 +20,13 @@ print("event_sha: {}".format(event_sha))
 print("")
 print("")
 
+
 def print_error(output_str: str):
     print(output_str)
     exit(1)
 
-if event_name != "workflow_run" and event_name != "pull_request_review":
+
+if event_name != "workflow_run" and event_name != "pull_request_review" and event_name != "check_suite":
     print_error("Unexpected event_name which triggered this workflow run: {}".format(event_name))
 
 event_data = {}
@@ -34,11 +36,11 @@ with open(os.getenv("GITHUB_EVENT_PATH"), mode="r") as payload:
 
 
 pull_request_number = "0"
-if event_name == "workflow_run":
-    if len(event_data["workflow_run"]["pull_requests"]) != 1:
-        print("This workflow_run is either connected to several pull requests or none. Nothing to merge.")
+if event_name == "workflow_run" or event_name == "check_suite":
+    if len(event_data[event_name]["pull_requests"]) != 1:
+        print("This {} is either connected to several pull requests or none. Nothing to merge.".format(event_name))
         exit(0)
-    pull_request_number = event_data["workflow_run"]["pull_requests"][0]["number"]
+    pull_request_number = event_data[event_name]["pull_requests"][0]["number"]
 elif event_name == "pull_request_review":
     pull_request_number = event_data["pull_request"]["number"]
 
@@ -46,14 +48,6 @@ print("pull_request_number: {}".format(pull_request_number))
 
 if pull_request_number == "0":
     print_error("pull_request_number could not be detected in the event payload")
-
-# workflow_run.pull_requests.number -> 1
-# workflow_run.pull_requests.id -> 522534189
-# workflow_run.pull_requests.url
-# workflow_run.conclusion == "success"
-
-# pull_request_review.author_association == "Collaborator" || "OWNER" ?
-# pull_request.state == "approved" ? is dismissed a state we would get here?
 
 pr = repo.get_pull(pull_request_number)
 
@@ -79,7 +73,9 @@ approvals_required = 1
 latest_review_by_collaborators = {}
 for review in reviews:
     if review.user in collaborators:
-        latest_review_by_collaborators[review.user.login] = review
+        # We only care about APPROVED, CHANGES_REQUESTED and DISMISSED
+        if review.state != "COMMENTED":
+            latest_review_by_collaborators[review.user.login] = review
 
 for _, review in latest_review_by_collaborators.items():
     # CHANGES_REQUESTED should be always dismissed or changed to an APPROVAL
@@ -122,7 +118,7 @@ checks_api_call = subprocess.run(
     'curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/{}/commits/{}/check-runs'.format(REPOSITORY_SLUG, pr_latest_commit),
     capture_output=True,
     shell=True
-    )
+)
 
 checks_string = checks_api_call.stdout.decode("utf-8")
 
