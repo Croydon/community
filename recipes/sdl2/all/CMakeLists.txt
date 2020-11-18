@@ -12,6 +12,4 @@ if(UNIX AND NOT APPLE)
   endif()
 endif()
 
-
-
 add_subdirectory(source_subfolder)
