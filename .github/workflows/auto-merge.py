@@ -93,7 +93,7 @@ print("")
 print("")
 
 if changes_requested:
-    print("The pull request contains at least one request for changes on the latest commit. This has to be addressed first.")
+    print("The pull request contains at least one request for changes. This has to be addressed first.")
     exit(0)
 
 if approvals_on_latest_commit < approvals_required:
@@ -101,4 +101,10 @@ if approvals_on_latest_commit < approvals_required:
     exit(0)
 
 print("Required approvals reached and no request for changes. Checking latest commit status...")
+
+statuses = repo.get_commit(pr_latest_commit)
+
+for status in statuses:
+    pprint.pprint(status)
+
 # TODO
