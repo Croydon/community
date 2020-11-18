@@ -142,7 +142,8 @@ for check in checks["check_runs"]:
             print("The check {} is still pending. Exiting.".format(check["name"]))
             exit(0)
     else:
-            print("Unexpected status {} for check {}. Exiting.".format(check["status"], check["name"]))
+            print("Unexpected status {} for check {}. Conclusion {}. Exiting.".format(check["status"], check["name"], check["conclusion"]))
+            print(check)
             exit(0)
 
 if checks_successful != checks_successful_required:
