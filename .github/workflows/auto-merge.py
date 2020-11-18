@@ -28,7 +28,7 @@ if event_name != "workflow_run" and event_name != "pull_request_review":
 event_data = {}
 with open(os.getenv("GITHUB_EVENT_PATH"), mode="r") as payload:
     event_data = json.load(payload)
-    pprint.pprint(event_data)
+    # pprint.pprint(event_data)
 
 
 pull_request_number = "0"
@@ -54,6 +54,10 @@ if pull_request_number == "0":
 # pull_request.state == "approved" ? is dismissed a state we would get here?
 
 pr = repo.get_pull(pull_request_number)
+
+if not pr.mergeable:
+    print("According to GitHub the pull request is not mergeable right now. Are there conflicts?")
+    exit(0)
 
 pr_latest_commit = pr.head.sha
 
