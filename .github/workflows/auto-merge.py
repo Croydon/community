@@ -2,10 +2,12 @@ from github import Github
 
 import os
 import json
+import subprocess
 import pprint
 
+REPOSITORY_SLUG = "Croydon/community"  # TODO env var
 g = Github(os.getenv("GITHUB_TOKEN"))
-repo = g.get_repo("Croydon/community") # TODO env var
+repo = g.get_repo(REPOSITORY_SLUG)
 
 event_name = os.getenv("GITHUB_EVENT_NAME")
 event_path = os.getenv("GITHUB_EVENT_PATH")
@@ -108,19 +110,46 @@ if approvals_on_latest_commit < approvals_required:
     exit(0)
 
 print("Required approvals reached and no request for changes. Checking latest commit status...")
-
+print("")
 
 # There is a difference in commit statuses and checks
 # Our CI runs are all qualifing as checks
 # Since PyGithub is not yet supporting checks, we have to use something else here
 # https://github.com/PyGithub/PyGithub/issues/1621
 # TODO: Use only PyGithub one it supports checks
-statuses = repo.get_commit(pr_latest_commit).get_statuses()
 
-for status in statuses:
-    pprint.pprint(status)
-    print("test")
+checks_api_call = subprocess.run(
+    'curl -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/{}/commits/{}/check-runs'.format(REPOSITORY_SLUG, pr_latest_commit),
+    capture_output=True,
+    shell=True
+    )
+
+checks_string = checks_api_call.stdout.decode("utf-8")
+
+checks = json.load(checks_string)
 
 
+checks_successful = 0
+# THIS workflow run (auto merge) is currently running, it can't be successful yet
+# Therefore everything has to be successful except one
+checks_successful_required = checks["total_count"] - 1
 
-# TODO
+for check in checks["check_runs"]:
+    if check["status"] == "completed" and check["conclusion"] == "success":
+        checks_successful = checks_successful + 1
+    elif check["status"] == "pending":
+        if check["name"] != "Auto Merge Pull Requests":
+            print("The check {} is still pending. Exiting.".format(check["name"]))
+            exit(0)
+    else:
+            print("Unexpected status {} for check {}. Exiting.".format(check["status"], check["name"]))
+            exit(0)
+
+if checks_successful != checks_successful_required:
+    print("Not all checks have passed. More work required 🙂")
+    exit(0)
+
+print("")
+print("All checks passed. Merging...")
+
+pr.merge(merge_methode="squash")
