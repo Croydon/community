@@ -53,4 +53,5 @@ reviews = pr.get_reviews()
 
 print("reviews:")
 for review in reviews:
-    print("{}: {}".format(review.users, review.state))
+    pprint.pprint(review)
+    print("{}: {}".format(review.user, review.state))
