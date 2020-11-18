@@ -68,7 +68,7 @@ approvals_required = 1
 latest_review_by_user = {}
 for review in reviews:
     # TODO: Check if review comes from an OWNER or Collaborator
-    latest_review_by_user[review.user.login] = review.state
+    latest_review_by_user[review.user.login] = review
 
 pprint.pprint(latest_review_by_user)
 
