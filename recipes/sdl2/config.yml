@@ -1,3 +1,4 @@
 versions:
   "2.0.12":
     folder: all
+    build: "minimal"
