@@ -61,6 +61,24 @@ print("all reviews on latest commit:")
 
 print("")
 
+changes_requested = False
+latest_review_by_user = {}
 for review in reviews:
+    # TODO: Check if review comes from an OWNER or Collaborator
+    latest_review_by_user[review.user.login] = review.state
+
+pprint.pprint(latest_review_by_user)
+
+for _, review in latest_review_by_user.items():
+    # CHANGES_REQUESTED should be always dismissed or changed to an APPROVAL
+    # Even if the CHANGES_REQUESTED do not happen on the latest commit,
+    # they should be respected
+    if review.state == "CHANGES_REQUESTED":
+        changes_requested = True
+
     if review.commit_id == pr_latest_commit:
         print("{}: {} on commit: {}".format(review.user, review.state, review.commit_id))
+
+
+if changes_requested:
+    print("The pull request contains at least one request for changes on the latest commit")
