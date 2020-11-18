@@ -331,5 +331,6 @@ class SDL2Conan(ConanFile):
             if self.settings.compiler == "gcc":
                 self.cpp_info.system_libs.append("mingw32")
 
+
         self.cpp_info.names["cmake_find_package"] = "SDL2"
         self.cpp_info.names["cmake_find_package_multi"] = "SDL2"
